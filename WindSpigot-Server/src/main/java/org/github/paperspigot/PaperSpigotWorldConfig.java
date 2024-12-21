@@ -20,7 +20,6 @@ public class PaperSpigotWorldConfig {
 	public void init() {
 		this.verbose = getBoolean("verbose", true);
 
-		log("-------- World Settings For [" + worldName + "] --------");
 		PaperSpigotConfig.readConfig(PaperSpigotWorldConfig.class, this);
 	}
 
@@ -73,7 +72,6 @@ public class PaperSpigotWorldConfig {
 
 	private void allowUndeadHorseLeashing() {
 		allowUndeadHorseLeashing = getBoolean("allow-undead-horse-leashing", false);
-		log("Allow undead horse types to be leashed: " + allowUndeadHorseLeashing);
 	}
 
 	public double squidMinSpawnHeight;
@@ -82,14 +80,12 @@ public class PaperSpigotWorldConfig {
 	private void squidSpawnHeight() {
 		squidMinSpawnHeight = getDouble("squid-spawn-height.minimum", 45.0D);
 		squidMaxSpawnHeight = getDouble("squid-spawn-height.maximum", 63.0D);
-		log("Squids will spawn between Y: " + squidMinSpawnHeight + " and Y: " + squidMaxSpawnHeight);
 	}
 
 	public float playerBlockingDamageMultiplier;
 
 	private void playerBlockingDamageMultiplier() {
 		playerBlockingDamageMultiplier = getFloat("player-blocking-damage-multiplier", 0.5F);
-		log("Player blocking damage multiplier set to " + playerBlockingDamageMultiplier);
 	}
 
 	public int cactusMaxHeight;
@@ -98,7 +94,6 @@ public class PaperSpigotWorldConfig {
 	private void blockGrowthHeight() {
 		cactusMaxHeight = getInt("max-growth-height.cactus", 3);
 		reedMaxHeight = getInt("max-growth-height.reeds", 3);
-		log("Max height for cactus growth " + cactusMaxHeight + ". Max height for reed growth " + reedMaxHeight);
 	}
 
 	public int fishingMinTicks;
@@ -129,8 +124,6 @@ public class PaperSpigotWorldConfig {
 			softDespawnDistance = hardDespawnDistance;
 		}
 
-		log("Living Entity Despawn Ranges:  Soft: " + softDespawnDistance + " Hard: " + hardDespawnDistance);
-
 		softDespawnDistance = softDespawnDistance * softDespawnDistance;
 		hardDespawnDistance = hardDespawnDistance * hardDespawnDistance;
 	}
@@ -139,7 +132,6 @@ public class PaperSpigotWorldConfig {
 
 	private void keepSpawnInMemory() {
 		keepSpawnInMemory = getBoolean("keep-spawn-loaded", true);
-		log("Keep spawn chunk loaded: " + keepSpawnInMemory);
 	}
 
 	public int fallingBlockHeightNerf;
@@ -156,7 +148,6 @@ public class PaperSpigotWorldConfig {
 	private void tntEntityHeightNerf() {
 		tntEntityHeightNerf = getInt("tnt-entity-height-nerf", 0);
 		if (tntEntityHeightNerf != 0) {
-			log("TNT Entity Height Limit set to Y: " + tntEntityHeightNerf);
 		}
 	}
 
@@ -164,14 +155,12 @@ public class PaperSpigotWorldConfig {
 
 	private void waterOverLavaFlowSpeed() {
 		waterOverLavaFlowSpeed = getInt("water-over-lava-flow-speed", 5);
-		log("Water over lava flow speed: " + waterOverLavaFlowSpeed);
 	}
 
 	public boolean removeInvalidMobSpawnerTEs;
 
 	private void removeInvalidMobSpawnerTEs() {
 		removeInvalidMobSpawnerTEs = getBoolean("remove-invalid-mob-spawner-tile-entities", true);
-		log("Remove invalid mob spawner tile entities: " + removeInvalidMobSpawnerTEs);
 	}
 
 	public boolean removeUnloadedEnderPearls;
@@ -215,8 +204,6 @@ public class PaperSpigotWorldConfig {
 																											// the
 																											// preceding
 																											// cap.
-		log("WorldServer TickNextTick cap set at " + tickNextTickCap);
-		log("WorldServer TickNextTickList cap always processes redstone: " + tickNextTickListCapIgnoresRedstone);
 	}
 
 	public boolean useAsyncLighting;
@@ -224,7 +211,6 @@ public class PaperSpigotWorldConfig {
 	private void useAsyncLighting() {
 		// WindSpigot - optimize config defaults false -> true
 		useAsyncLighting = getBoolean("use-async-lighting", true);
-		log("World async lighting: " + useAsyncLighting);
 	}
 
 	public boolean disableEndCredits;
@@ -318,7 +304,6 @@ public class PaperSpigotWorldConfig {
 
 		// WindSpigot - optimize config defaults false -> true
 		fixCannons = getBoolean("fix-cannons", true);
-		log("Fix TNT cannons: " + fixCannons);
 	}
 
 	public boolean fallingBlocksCollideWithSigns;

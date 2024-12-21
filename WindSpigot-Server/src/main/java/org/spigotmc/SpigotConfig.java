@@ -223,11 +223,6 @@ public class SpigotConfig {
 		Timings.setTimingsEnabled(timings);
 		Timings.setHistoryInterval(timingHistoryInterval * 20);
 		Timings.setHistoryLength(timingHistoryLength * 20);
-
-		Bukkit.getLogger().log(Level.INFO,
-				"Spigot Timings: " + timings + " - Verbose: " + verboseTimings + " - Interval: "
-						+ timeSummary(Timings.getHistoryInterval() / 20) + " - Length: "
-						+ timeSummary(Timings.getHistoryLength() / 20));
 	}
 
 	protected static String timeSummary(int seconds) {
@@ -246,7 +241,6 @@ public class SpigotConfig {
 	private static void nettyThreads() {
 		int count = getInt("settings.netty-threads", 4);
 		System.setProperty("io.netty.eventLoopThreads", Integer.toString(count));
-		Bukkit.getLogger().log(Level.INFO, "Using {0} threads for Netty based IO", count);
 	}
 
 	public static boolean lateBind;
@@ -288,7 +282,6 @@ public class SpigotConfig {
 
 	private static void playerSample() {
 		playerSample = getInt("settings.sample-count", 12);
-		Bukkit.getLogger().log(Level.INFO, "Server Ping Player Sample Count: " + playerSample);
 	}
 
 	public static int playerShuffle;

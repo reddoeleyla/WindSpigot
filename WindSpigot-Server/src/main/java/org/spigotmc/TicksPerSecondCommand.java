@@ -17,6 +17,16 @@ public class TicksPerSecondCommand extends Command {
 		this.setPermission("bukkit.command.tps");
 	}
 
+	private String getCenteredMessageHeader(String color, String message) {
+		int length = 25 - ((message.length() + 2) / 2);
+		StringBuilder res = new StringBuilder("§8§m┃");
+		for (int i = 0; i < length; i++) res.append("-");
+		res.append("§8┃ ").append(color).append(message).append(" §8§m┃");
+		for (int i = 0; i < length; i++) res.append("-");
+		res.append("§8┃");
+		return res.toString();
+	}
+
 	@Override
 	public boolean execute(CommandSender sender, String currentAlias, String[] args) {
 		if (!testPermission(sender)) {
@@ -44,26 +54,24 @@ public class TicksPerSecondCommand extends Command {
 		for (WorldServer world : MinecraftServer.getServer().worlds) {
 			tileEntityCount = tileEntityCount + world.tileEntityList.size();
 		}
-		
-		sender.sendMessage(ChatColor.DARK_AQUA + "WindSpigot Performance:");
-		sender.sendMessage(ChatColor.AQUA + "TPS from last 1m, 5m, 15m: "
-				+ org.apache.commons.lang.StringUtils.join(tpsAvg, ", "));
-		sender.sendMessage(ChatColor.AQUA + "Current Memory Usage: " + ChatColor.GREEN
-				+ ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024)) + "/"
-				+ (Runtime.getRuntime().totalMemory() / (1024 * 1024)) + " mb (Max: "
-				+ (Runtime.getRuntime().maxMemory() / (1024 * 1024)) + " mb)");
-		sender.sendMessage(ChatColor.AQUA + "Online Players: " + ChatColor.GREEN + Bukkit.getOnlinePlayers().size());
-		sender.sendMessage(ChatColor.AQUA + "Entity Count: " + ChatColor.GREEN + entityCount);
-		sender.sendMessage(ChatColor.AQUA + "Tile Entity Count: " + ChatColor.GREEN + tileEntityCount);
-		sender.sendMessage(ChatColor.AQUA + "Mob AI: " + ChatColor.GREEN + MinecraftServer.getServer().worlds.get(0).nachoSpigotConfig.enableMobAI);
-		sender.sendMessage(ChatColor.AQUA + "Milliseconds to Run Last Tick: " + ChatColor.GREEN + Math.round(MinecraftServer.getServer().getLastMspt() * 100.0) / 100.0);
-		
+
+		double tps0 = MinecraftServer.getServer().recentTps[0];
+		String ticksPerSecond = (tps0 > 18.0 ? ChatColor.GREEN : (tps0 > 16.0 ? ChatColor.YELLOW : ChatColor.RED)).toString() + (tps0 > 20.0 ? "*" : "") + Math.min((double) Math.round(tps0 * 100.0) / 100.0, 20.0);
+		sender.sendMessage(this.getCenteredMessageHeader("§c", "Performance"));
+		sender.sendMessage("§r");
+		sender.sendMessage("§8» §7TPS 1m§8: §r" + ticksPerSecond);
+		sender.sendMessage("§8» §7Memory Usage§8: §a" + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024)) + "§8/§c" +  (Runtime.getRuntime().totalMemory() / (1024 * 1024)) + "MB §8(§e" + String.format("%.2f", Double.parseDouble(String.valueOf((((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024))/1000L)))) + "GB§8)");
+		sender.sendMessage("§8» §7Players online§8: §a" + Bukkit.getOnlinePlayers().size());
+		sender.sendMessage("§8» §7Entities§8: " + ChatColor.GREEN + entityCount);
+		sender.sendMessage("§8» §7Tile entities§8: " + ChatColor.GREEN + tileEntityCount);
+		sender.sendMessage("§8» §7Mob AI§8: " + (MinecraftServer.getServer().worlds.get(0).nachoSpigotConfig.enableMobAI ? ChatColor.GREEN + "✔" : ChatColor.RED + "✘"));
+		sender.sendMessage("§8» §7Last tick §8(§ems§8)§8: " + ChatColor.GREEN + Math.round(MinecraftServer.getServer().getLastMspt() * 100.0) / 100.0);
+		sender.sendMessage("§r");
+		sender.sendMessage(this.getCenteredMessageHeader("§c", "Performance"));
 		return true;
 	}
 
-	private static String format(double tps) // PaperSpigot - made static
-	{
-		return ((tps > 18.0) ? ChatColor.GREEN : (tps > 16.0) ? ChatColor.YELLOW : ChatColor.RED).toString()
-				+ ((tps > 21.0) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0); // Paper - only print * at 21, we commonly peak to 20.02 as the tick sleep is not accurate enough, stop the noise
+	private static String format(double tps) {
+		return ((tps > 18.0) ? ChatColor.GREEN : (tps > 16.0) ? ChatColor.YELLOW : ChatColor.RED) + ((tps > 21.0) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
 	}
 }

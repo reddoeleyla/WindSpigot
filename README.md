@@ -25,6 +25,14 @@ See the patches list below.
 **All credit goes to the people that made these patches.**<br>
 *Give credit where credit is due!*
 ```
+[RedSpigot-0001] Less Trash in console
+[RedSpigot-0002] Async player kicking
+[RedSpigot-0003] Async chunk (un-)loading
+[RedSpigot-0004] cleared AsyncCatcher#catchOp (causing trouble)
+[RedSpigot-0005] Fix lightExecutor submit spam when generating chunks using getChunkAt or when teleporting into a new region. Chunk creation speed improved by 6x 30cc3eb
+[RedSpigot-0006] Optimized light calculations by batching neighbor chunk calculations when recalculating gaps 4af022c
+[RedSpigot-0007] Optimize Network Queue
+
 [WindSpigot-0001] Thread affinity
 [WindSpigot-0002] WindSpigot config
 [WindSpigot-0003] Mob AI toggle command

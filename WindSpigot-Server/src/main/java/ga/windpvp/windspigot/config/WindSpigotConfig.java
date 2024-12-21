@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -202,6 +204,9 @@ public class WindSpigotConfig {
 		c.addComment("settings.tcp-fast-open.mode", "Options: 0 - Disabled.; 1 - TFO is enabled for outgoing connections (clients).; 2 - TFO is enabled for incoming connections (servers).; 3 - TFO is enabled for both clients and servers.");
 		c.addComment("settings.enable-protocollib-shim", "Enable ProtocolLib network shim. This allows ProtocolLib to work, but requires extra memory. Disable this if you don't use ProtocolLib!");
 		c.addComment("settings.instant-interaction", "Disables delay of all interactions.");
+		c.addComment("settings.packet-sending", "Delay packet-sending");
+		c.addComment("settings.packet-sending.delay", "Delay MilliSeconds");
+		c.addComment("settings.packet-sending.filter", "Enable White&Black list filtering");
 	}
 
 	private static void set(String path, Object val) {
@@ -661,5 +666,28 @@ public class WindSpigotConfig {
 
 	private static void instantPlayInUseEntity() {
 		instantPlayInUseEntity = getBoolean("settings.instant-interaction", false);
+	}
+
+	public static int packetSendingDelay;
+	private static void packetSendingDelay() {
+		packetSendingDelay = getInt("settings.packet-sending.delay", 0);
+	}
+	public static boolean packetSendingFilter;
+	public static void packetSendingFilter() {
+		packetSendingFilter = getBoolean("settings.packet-sending.filter", true);
+	}
+	public static boolean packetSendingWhiteOrBlack;
+	public static void packetSendingWhiteOrBlack() {
+		packetSendingWhiteOrBlack = getBoolean("settings.packet-sending.white-or-black", true);
+	}
+	public static List<Integer> packetSendingList = new ArrayList<>();
+	public static void packetSendingList() {
+		List<String> defaultList = Arrays.asList("0x12");
+		List<String> list = getList("settings.packet-sending.list", defaultList);
+		for (String str : list) {
+			try {
+				packetSendingList.add(Integer.decode(str));
+			} catch (Exception ignore) {}
+		}
 	}
 }

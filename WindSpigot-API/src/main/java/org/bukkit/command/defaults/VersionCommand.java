@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.util.StringUtil;
-import com.google.common.collect.ImmutableList;
 
 public class VersionCommand extends BukkitCommand {
 	public VersionCommand(String name) {
@@ -28,7 +27,7 @@ public class VersionCommand extends BukkitCommand {
 			return true;
 
 		if (args.length == 0) {
-			sender.sendMessage("This server is running " + Bukkit.getVersion()
+			sender.sendMessage("§3§lThis server is running " + Bukkit.getVersion()
 					+ " (Implementing API version " + Bukkit.getBukkitVersion() + ")");
 		} else {
 			StringBuilder name = new StringBuilder();
@@ -125,6 +124,6 @@ public class VersionCommand extends BukkitCommand {
 			}
 			return completions;
 		}
-		return ImmutableList.of();
+		return Arrays.asList();
 	}
 }

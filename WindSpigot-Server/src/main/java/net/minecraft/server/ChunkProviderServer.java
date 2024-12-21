@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 // CraftBukkit start
 import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import ga.windpvp.windspigot.random.FastRandom;
 import org.apache.logging.log4j.LogManager;
@@ -283,25 +285,24 @@ public class ChunkProviderServer implements IChunkProvider {
 		// CraftBukkit end
 	}
 
+	Executor executor = Executors.newCachedThreadPool();
+
 	public Chunk loadChunk(int i, int j) {
 		if (this.chunkLoader == null) {
 			return null;
 		} else {
 			try {
 				Chunk chunk = this.chunkLoader.a(this.world, i, j);
-
 				if (chunk != null) {
 					chunk.setLastSaved(this.world.getTime());
 					if (this.chunkProvider != null) {
-						world.timings.syncChunkLoadStructuresTimer.startTiming(); // Spigot
 						this.chunkProvider.recreateStructures(chunk, i, j);
-						world.timings.syncChunkLoadStructuresTimer.stopTiming(); // Spigot
 					}
 				}
 
 				return chunk;
 			} catch (Exception exception) {
-				ChunkProviderServer.b.error("Couldn\'t load chunk", exception);
+				ChunkProviderServer.b.error("Couldn't load chunk", exception);
 				return null;
 			}
 		}
@@ -344,15 +345,15 @@ public class ChunkProviderServer implements IChunkProvider {
 
 				// CraftBukkit start
 				BlockFalling.instaFall = true;
-				Random random = new FastRandom();
-				random.setSeed(world.getSeed());
-				long xRand = random.nextLong() / 2L * 2L + 1L;
-				long zRand = random.nextLong() / 2L * 2L + 1L;
-				random.setSeed(i * xRand + j * zRand ^ world.getSeed());
 
 				org.bukkit.World world = this.world.getWorld();
-				if (world != null) {
+				if (world != null && !world.getPopulators().isEmpty()) {
 					this.world.populating = true;
+					Random random = new FastRandom();
+					random.setSeed(world.getSeed());
+					long xRand = random.nextLong() / 2L * 2L + 1L;
+					long zRand = random.nextLong() / 2L * 2L + 1L;
+					random.setSeed(i * xRand + j * zRand ^ world.getSeed());
 					try {
 						for (org.bukkit.generator.BlockPopulator populator : world.getPopulators()) {
 							populator.populate(world, random, chunk.bukkitChunk);

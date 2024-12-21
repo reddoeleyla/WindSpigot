@@ -1,6 +1,7 @@
 package org.bukkit;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -86,18 +87,18 @@ public interface Chunk {
 	/**
 	 * Loads the chunk.
 	 *
-	 * @param generate Whether or not to generate a chunk if it doesn't already
+	 * @param generate Whether to generate a chunk if it doesn't already
 	 *                 exist
 	 * @return true if the chunk has loaded successfully, otherwise false
 	 */
-	boolean load(boolean generate);
+	CompletableFuture<Boolean> load(boolean generate);
 
 	/**
 	 * Loads the chunk.
 	 *
 	 * @return true if the chunk has loaded successfully, otherwise false
 	 */
-	boolean load();
+	CompletableFuture<Boolean> load();
 
 	/**
 	 * Unloads and optionally saves the Chunk

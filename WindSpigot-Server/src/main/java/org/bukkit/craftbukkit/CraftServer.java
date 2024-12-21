@@ -188,7 +188,7 @@ public final class CraftServer implements Server {
 	private YamlConfiguration configuration;
 	private YamlConfiguration commandsConfiguration;
 	private final Yaml yaml = new Yaml(new SafeConstructor());
-	private final Map<UUID, OfflinePlayer> offlinePlayers = new MapMaker().softValues().makeMap();
+	private final Map<UUID, OfflinePlayer> offlinePlayers = new MapMaker().makeMap();
 	private final EntityMetadataStore entityMetadata = new EntityMetadataStore();
 	private final PlayerMetadataStore playerMetadata = new PlayerMetadataStore();
 	private final WorldMetadataStore worldMetadata = new WorldMetadataStore();
@@ -414,8 +414,6 @@ public final class CraftServer implements Server {
 		if (type == PluginLoadOrder.POSTWORLD) {
 			// Spigot start - Allow vanilla commands to be forced to be the main command
 			setVanillaCommands(true);
-			commandMap.setFallbackCommands();
-			setVanillaCommands(false);
 			// Spigot end
 			commandMap.registerServerAliases();
 			loadCustomPermissions();
@@ -937,10 +935,8 @@ public final class CraftServer implements Server {
 		try {
 			perms = (Map<String, Map<String, Object>>) yaml.load(stream);
 		} catch (MarkedYAMLException ex) {
-			getLogger().log(Level.WARNING, "Server permissions file " + file + " is not valid YAML: " + ex.toString());
 			return;
 		} catch (Throwable ex) {
-			getLogger().log(Level.WARNING, "Server permissions file " + file + " is not valid YAML.", ex);
 			return;
 		} finally {
 			try {
@@ -950,7 +946,6 @@ public final class CraftServer implements Server {
 		}
 
 		if (perms == null) {
-			getLogger().log(Level.INFO, "Server permissions file " + file + " is empty, ignoring it");
 			return;
 		}
 
@@ -961,7 +956,6 @@ public final class CraftServer implements Server {
 			try {
 				pluginManager.addPermission(perm);
 			} catch (IllegalArgumentException ex) {
-				getLogger().log(Level.SEVERE, "Permission in " + file + " was already defined", ex);
 			}
 		}
 	}

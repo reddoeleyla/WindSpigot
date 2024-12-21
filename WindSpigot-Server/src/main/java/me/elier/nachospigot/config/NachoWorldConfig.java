@@ -20,7 +20,6 @@ public class NachoWorldConfig {
 	public void init() {
 		this.verbose = getBoolean("verbose", false);
 
-		log("-------- World Settings For [\" + worldName + \"] --------");
 		NachoConfig.readConfig(NachoWorldConfig.class, this);
 	}
 

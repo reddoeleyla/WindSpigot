@@ -103,7 +103,6 @@ public class ServerConnection {
 				switch (eventGroupType) {
 				default:
 				case DEFAULT: {
-					LOGGER.info("Finding best event group type using fall-through");
 				}
 
 				case EPOLL: {
@@ -112,8 +111,6 @@ public class ServerConnection {
 						b = new LazyInitVar<>(() -> new EpollEventLoopGroup(workerThreadCount));
 
 						channel = EpollServerSocketChannel.class;
-
-						LOGGER.info("Using epoll");
 
 						break;
 					}
@@ -125,8 +122,6 @@ public class ServerConnection {
 
 						channel = KQueueServerSocketChannel.class;
 
-						LOGGER.info("Using kqueue");
-
 						break;
 					}
 				}
@@ -136,16 +131,12 @@ public class ServerConnection {
 
 					channel = NioServerSocketChannel.class;
 
-					LOGGER.info("Using NIO");
-
 					break;
 				}
 				}
 			}
 
 			// Paper start - indicate Velocity natives in use
-			LOGGER.info("WindSpigot: Using " + Natives.compress.getLoadedVariant() + " compression from Velocity.");
-			LOGGER.info("WindSpigot: Using " + Natives.cipher.getLoadedVariant() + " cipher from Velocity.");
 			// Paper end
 
 			this.getListeningChannels()
@@ -158,7 +149,6 @@ public class ServerConnection {
 
 	public void stopServer() throws InterruptedException {
 		this.started = false;
-		LOGGER.info("Shutting down event loops");
 		for (ChannelFuture channelfuture : this.getListeningChannels()) {
 			try {
 				channelfuture.channel().close().sync();

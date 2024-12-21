@@ -33,7 +33,6 @@ public class KnockbackConfig {
 		CONFIG_FILE = configFile;
 		config = new YamlConfiguration();
 		try {
-			WindSpigot.LOGGER.info("Loading WindSpigot knockback config from " + configFile.getName());
 			config.load(CONFIG_FILE);
 		} catch (IOException ignored) {
 		} catch (InvalidConfigurationException ex) {
@@ -153,10 +152,8 @@ public class KnockbackConfig {
 		}
 		currentKb = getKbProfileByName(getString("knockback.current", "kohi"));
 		if (currentKb == null) {
-			WindSpigot.LOGGER.warn("Knockback profile selected was not found, using profile 'kohi' for now!");
 			currentKb = getKbProfileByName("kohi");
 			
-			WindSpigot.LOGGER.info("Setting default knockback as 'kohi'...");
 			set("knockback.current", "kohi");
 		}
 		save();

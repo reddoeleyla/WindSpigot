@@ -20,7 +20,6 @@ public class TacoSpigotWorldConfig {
 	public void init() {
 		this.verbose = getBoolean("verbose", true);
 
-		log("-------- World Settings For [" + worldName + "] --------");
 		TacoSpigotConfig.readConfig(TacoSpigotWorldConfig.class, this);
 	}
 

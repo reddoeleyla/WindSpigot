@@ -4,11 +4,12 @@ import org.bukkit.Bukkit;
 
 public class AsyncCatcher {
 
-	public static boolean enabled = true;
+	public static boolean enabled = false;
 
 	public static void catchOp(String reason) {
-		if (enabled && !Bukkit.isPrimaryThread()) {
-			throw new IllegalStateException("Asynchronous " + reason + "!");
+		if (!enabled || Bukkit.isPrimaryThread()) {
+			return;
 		}
+		throw new IllegalStateException("Asyncronus " + reason);
 	}
 }

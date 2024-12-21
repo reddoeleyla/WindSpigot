@@ -24,14 +24,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.setProperty("log4j2.formatMsgNoLookups", "true");
-		try {
-			if (!SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_17)) {
-				System.err.println("It seems like you are not using Java 17!");
-				System.out.println("The use of Java 17 is strongly recommended.");
-			}
-		} catch (Exception ignored) {
-			System.err.println("Failed to get Java version! Continuing either way..");
-		}
+		System.out.println("The use of Java 17 is strongly recommended.");
 		OptionParser parser = new OptionParser() {
 			{
 				acceptsAll(asList("?", "help"), "Show the help");
@@ -175,7 +168,7 @@ public class Main {
 				int maxPermGen = 0; // In kb
 				for (String s : java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments()) {
 					if (s.startsWith("-XX:MaxPermSize")) {
-						maxPermGen = Integer.parseInt(s.replaceAll("[^\\d]", ""));
+						maxPermGen = Integer.parseInt(s.replaceAll("\\D", ""));
 						maxPermGen <<= 10 * ("kmg".indexOf(Character.toLowerCase(s.charAt(s.length() - 1))));
 					}
 				}
@@ -197,7 +190,7 @@ public class Main {
 																											// access
 																											// while
 																											// loading
-				System.out.println("Loading libraries, please wait...");
+				System.out.println("Loading DispenserRegistry and DedicatedServer...");
 
 				DispenserRegistry.c();
 				OptionSet finalOptions = options;

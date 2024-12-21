@@ -374,14 +374,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 	public void setVelocity(Vector vel) {
 		// Paper start - warn server owners when plugins try to set super high
 		// velocities
-		if (PaperSpigotConfig.warnForExcessiveVelocity) {
-			if (vel.getX() > 4 || vel.getX() < -4 || vel.getY() > 4 || vel.getY() < -4 || vel.getZ() > 4
-					|| vel.getZ() < -4) {
-				getServer().getLogger().warning("Excessive velocity set detected: tried to set velocity of entity #"
-						+ getEntityId() + " to (" + vel.getX() + "," + vel.getY() + "," + vel.getZ() + ").");
-				Thread.dumpStack();
-			}
-		}
+		//if (PaperSpigotConfig.warnForExcessiveVelocity) {
+		//	if (vel.getX() > 4 || vel.getX() < -4 || vel.getY() > 4 || vel.getY() < -4 || vel.getZ() > 4
+		//			|| vel.getZ() < -4) {
+		//		getServer().getLogger().warning("Excessive velocity set detected: tried to set velocity of entity #"
+		//				+ getEntityId() + " to (" + vel.getX() + "," + vel.getY() + "," + vel.getZ() + ").");
+		//		Thread.dumpStack();
+		//	}
+		//}
 		// Paper end
 
 		entity.motX = vel.getX();

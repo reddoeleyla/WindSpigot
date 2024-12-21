@@ -25,6 +25,7 @@ import java.util.function.Function;
 import javax.imageio.ImageIO;
 
 import ga.windpvp.windspigot.random.FastRandom;
+import io.papermc.paper.util.linkedqueue.CachedSizeConcurrentLinkedQueue;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -122,9 +123,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 	private long X = 0L;
 	private final GameProfileRepository Y;
 	private final UserCache Z;
-	protected final Queue<FutureTask<?>> j = new java.util.concurrent.ConcurrentLinkedQueue<FutureTask<?>>(); // Spigot,
-																												// PAIL:
-																												// Rename
+	protected final Queue<FutureTask<?>> j = new CachedSizeConcurrentLinkedQueue<>(); // Spigot, PAIL: Rename // Paper - Make size() constant-time
 	private Thread serverThread;
 	private long ab = az();
 
@@ -341,18 +340,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 				File oldWorld = new File(new File(s), dim);
 
 				if ((!newWorld.isDirectory()) && (oldWorld.isDirectory())) {
-					MinecraftServer.LOGGER.info("---- Migration of old " + worldType + " folder required ----");
-					MinecraftServer.LOGGER.info(
-							"Unfortunately due to the way that Minecraft implemented multiworld support in 1.6, Bukkit requires that you move your "
-									+ worldType + " folder to a new location in order to operate correctly.");
-					MinecraftServer.LOGGER.info(
-							"We will move this folder for you, but it will mean that you need to move it back should you wish to stop using Bukkit in the future.");
-					MinecraftServer.LOGGER.info("Attempting to move " + oldWorld + " to " + newWorld + "...");
-
-					if (newWorld.exists()) {
-						MinecraftServer.LOGGER.warn("A file or folder already exists at " + newWorld + "!");
-						MinecraftServer.LOGGER.info("---- Migration of old " + worldType + " folder failed ----");
-					} else if (newWorld.getParentFile().mkdirs()) {
+					if (newWorld.getParentFile().mkdirs()) {
 						if (oldWorld.renameTo(newWorld)) {
 							MinecraftServer.LOGGER.info("Success! To restore " + worldType
 									+ " in the future, simply move " + newWorld + " to " + oldWorld);
@@ -361,16 +349,8 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 								com.google.common.io.Files.copy(new File(new File(s), "level.dat"),
 										new File(new File(name), "level.dat"));
 							} catch (IOException exception) {
-								MinecraftServer.LOGGER.warn("Unable to migrate world data.");
 							}
-							MinecraftServer.LOGGER.info("---- Migration of old " + worldType + " folder complete ----");
-						} else {
-							MinecraftServer.LOGGER.warn("Could not move folder " + oldWorld + " to " + newWorld + "!");
-							MinecraftServer.LOGGER.info("---- Migration of old " + worldType + " folder failed ----");
 						}
-					} else {
-						MinecraftServer.LOGGER.warn("Could not create path for " + newWorld + "!");
-						MinecraftServer.LOGGER.info("---- Migration of old " + worldType + " folder failed ----");
 					}
 				}
 
@@ -410,7 +390,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 		// spawn in memory
 		for (int m = 0; m < worlds.size(); m++) {
 			WorldServer worldserver = this.worlds.get(m);
-			LOGGER.info("Preparing start region for level " + m + " (Seed: " + worldserver.getSeed() + ")");
 
 			if (!worldserver.getWorld().getKeepSpawnInMemory()) {
 				continue;
@@ -469,7 +448,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 	protected void a_(String s, int i) {
 		this.f = s;
 		this.g = i;
-		MinecraftServer.LOGGER.info(s + ": " + i + "%");
 	}
 
 	protected void s() {
@@ -491,8 +469,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 
 				if (worldserver != null) {
 					if (!flag) {
-						MinecraftServer.LOGGER.info("Saving chunks for level \'" + worldserver.getWorldData().getName()
-								+ "\'/" + worldserver.worldProvider.getName());
 					}
 
 					try {
@@ -536,7 +512,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 			}
 
 			if (this.v != null) {
-				MinecraftServer.LOGGER.info("Saving players");
 				this.v.savePlayers();
 				this.v.u();
 				try {
@@ -563,7 +538,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 			}
 			// Spigot start
 			if (org.spigotmc.SpigotConfig.saveUserCacheOnStopOnly) {
-				LOGGER.info("Saving usercache.json");
 				this.Z.c();
 			}
 			// Spigot end
@@ -1688,7 +1662,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 			try {
 				return Futures.immediateFuture(callable.call());
 			} catch (Exception exception) {
-				return Futures.immediateFailedCheckedFuture(exception);
+				return Futures.immediateFailedFuture(exception);
 			}
 		}
 	}

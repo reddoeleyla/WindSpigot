@@ -1,11 +1,7 @@
 package xyz.sculas.nacho.anticrash;
 
 import ga.windpvp.windspigot.protocol.PacketListener;
-import net.minecraft.server.ChatMessage;
-import net.minecraft.server.Packet;
-import net.minecraft.server.PacketDataSerializer;
-import net.minecraft.server.PacketPlayInCustomPayload;
-import net.minecraft.server.PlayerConnection;
+import net.minecraft.server.*;
 
 public class AntiCrash implements PacketListener {
 	@Override
@@ -20,12 +16,10 @@ public class AntiCrash implements PacketListener {
 				playerConnection.getNetworkManager().close(new ChatMessage("Readable bytes exceeds limit!"));
 				return false;
 			}
-			// ty Lew_x :)
-			/*
-			 * if (ab.capacity() > 25780 || ab.capacity() < 1) {
-			 * playerConnection.getNetworkManager().close(new
-			 * ChatMessage("Wrong capacity!")); return false; }
-			 */
+
+			if (packet instanceof PacketHandshakingInSetProtocol) {
+				playerConnection.getPlayer().kickPlayer("Invalid packets.");
+			}
 		}
 		return true;
 	}

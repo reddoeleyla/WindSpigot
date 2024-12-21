@@ -112,7 +112,6 @@ public class EntityTracker {
 
 			this.c.add(entitytrackerentry);
 			this.trackedEntities.a(entity.getId(), entitytrackerentry);
-			// entitytrackerentry.scanPlayers(this.world.players);
 			entitytrackerentry.addNearPlayers();
 		} catch (Throwable throwable) {
 			throwable.printStackTrace();
@@ -147,6 +146,9 @@ public class EntityTracker {
 	public void updatePlayers() {
 		for (EntityTrackerEntry entry : c) {
 			entry.update();
+		}
+		for (EntityPlayer player : MinecraftServer.getServer().getPlayerList().players) {
+			player.playerConnection.sendQueuedPackets();
 		}
 	    // WindSpigot start
         for (EntityPlayer player : MinecraftServer.getServer().getPlayerList().players) {

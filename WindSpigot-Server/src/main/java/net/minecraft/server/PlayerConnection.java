@@ -1190,7 +1190,31 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 					e.printStackTrace();
 				}
 			}
-			this.networkManager.handle(packet);
+			int packetId = EnumProtocol.getProtocolForPacket(packet).getPacketIdForPacket(packet);
+			boolean accept = false;
+			if (WindSpigotConfig.packetSendingFilter) {
+				if (WindSpigotConfig.packetSendingWhiteOrBlack) {
+					if (WindSpigotConfig.packetSendingList.contains(packetId)) accept = true;
+				} else {
+					if (!WindSpigotConfig.packetSendingList.contains(packetId)) accept = true;
+				}
+			}
+			if (WindSpigotConfig.packetSendingDelay <= 0) accept = false;
+			if (accept) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(WindSpigotConfig.packetSendingDelay);
+							networkManager.handle(packet);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}).start();
+			} else {
+				this.networkManager.handle(packet);
+			}
 		} catch (Throwable throwable) {
 			CrashReport crashreport = CrashReport.a(throwable, "Sending packet");
 			CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Packet being sent");
