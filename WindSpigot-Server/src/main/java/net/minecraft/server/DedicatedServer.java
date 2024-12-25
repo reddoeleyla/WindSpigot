@@ -283,7 +283,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 				long i1 = System.nanoTime() - j;
 				String s3 = String.format("%.3fs", i1 / 1.0E9D);
 
-				DedicatedServer.LOGGER.info("SpigotFix started in " + s3 + ".");
+				DedicatedServer.LOGGER.info("RedSpigot started in " + s3 + ".");
 				if (this.propertyManager.getBoolean("enable-query", false)) {
 					DedicatedServer.LOGGER.info("Starting GS4 status listener");
 					this.m = new RemoteStatusListener(this);

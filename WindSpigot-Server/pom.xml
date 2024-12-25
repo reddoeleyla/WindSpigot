@@ -249,12 +249,6 @@
 										<exclude>org/apache/logging/log4j/**</exclude>
 									</excludes>
 								</filter>
-								<filter>
-									<artifact>org.spigotmc:minecraft-server:**</artifact>
-									<excludes>
-										<exclude>com/google/common/**</exclude>
-									</excludes>
-								</filter>
 							</filters>
 							<!-- Paper end - Update Log4j -->
 							<relocations>

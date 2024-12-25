@@ -206,7 +206,6 @@ public class WindSpigotConfig {
 		c.addComment("settings.instant-interaction", "Disables delay of all interactions.");
 		c.addComment("settings.packet-sending", "Delay packet-sending");
 		c.addComment("settings.packet-sending.delay", "Delay MilliSeconds");
-		c.addComment("settings.packet-sending.filter", "Enable White&Black list filtering");
 	}
 
 	private static void set(String path, Object val) {
